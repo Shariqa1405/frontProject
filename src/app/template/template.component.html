@@ -13,7 +13,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let template of templates">
+      @for(template of templates; track template.id){
+      <tr>
         <td>{{ template.templateText }}</td>
         <td>
           <button class="btn btn-info btn-sm" (click)="preview(template.id)">
@@ -33,6 +34,7 @@
           </button>
         </td>
       </tr>
+      }
     </tbody>
   </table>
 </div>

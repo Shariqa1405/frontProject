@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from '../model/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,12 @@ export class AuthService {
       { signin, password },
       { withCredentials: true }
     );
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.authUrl}/whoami`, {
+      withCredentials: true,
+    });
   }
 
   // signout(): Observable<any> {

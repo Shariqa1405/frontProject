@@ -5,7 +5,8 @@ import { AuthComponent } from './auth/auth.component';
 import { TemplateComponent } from './template/template.component';
 
 export const routes: Routes = [
-  { path: '', component: AppComponent },
+  //   { path: '', component: AppComponent },
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   { path: 'auth', component: AuthComponent },
   { path: 'templates', component: TemplateComponent },
 ];

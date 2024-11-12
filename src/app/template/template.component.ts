@@ -6,17 +6,22 @@ import { Template } from '../model/template.model';
 
 import { DialogComponent } from '../dialog/dialog.component';
 import { PreviewComponent } from '../preview/preview.component';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-template',
   templateUrl: './template.component.html',
+  standalone: true,
+  imports: [CommonModule],
 })
 export class TemplateComponent implements OnInit {
   templates: Template[] = [];
 
   constructor(
     private templateService: TemplateService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -32,11 +37,24 @@ export class TemplateComponent implements OnInit {
   CreateDialog(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '500px',
-      data: { mode: 'create' },
+      data: { template: null },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'refresh') this.savedTemplates();
+      if (result) {
+        this.authService.getCurrentUser().subscribe((user) => {
+          const id = user.id;
+          this.templateService.createUsersTemplat(result, id).subscribe(
+            (createdTemplate) => {
+              console.log('Template created', createdTemplate);
+              this.savedTemplates();
+            },
+            (error) => {
+              console.error('Error creating template:', error);
+            }
+          );
+        });
+      }
     });
   }
 
